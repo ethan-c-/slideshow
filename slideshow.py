@@ -65,12 +65,12 @@ def get_picture(array, index):
         image_url = image_url["Image"]["CustomURL"]
         logging.debug('%s', image_url)
         #get the picture using the url and save locally
-        urllib.urlretrieve(image_url, "/home/lwuser/slideshow/next_pic.jpg")
+        urllib.urlretrieve(image_url, "next_pic.jpg")
         logging.debug('image retreived')
         #create an image using the picture and resize
         image = pygame.Surface((window.get_rect().width,\
          window.get_rect().height))
-        image = pygame.image.load("/home/lwuser/slideshow/next_pic.jpg")
+        image = pygame.image.load("next_pic.jpg")
         image = image.convert()
         if image.get_rect() != window.get_rect():
             logging.debug('resizing image')
@@ -202,7 +202,7 @@ while not done:
     # wait
     clock.tick(4)
 
-    if pygame.time.get_ticks() > (slide_start_time + settings['slideshow']['delay'] * 1000):
+    if pygame.time.get_ticks() > (slide_start_time + int(settings['slideshow']['delay']) * 1000):
         slide_start_time = pygame.time.get_ticks()
         # change image
         crossfade(current_image, next_image)
