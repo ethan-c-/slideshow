@@ -159,10 +159,10 @@ while not done:
         if event.type == KEYDOWN:
             if event.key == K_ESCAPE:
                 done = True
-            else if event.key == K_p:
+            elif event.key == K_p:
                 logging.debug('paused')
                 index -= 1
-            else if event.hey == K_b:
+            elif event.hey == K_b:
                 logging.debug('back up')
                 index -= 2
 
