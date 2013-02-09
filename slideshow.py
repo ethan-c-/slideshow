@@ -147,9 +147,10 @@ id_array = load_array(file_name)
 index = 0
 done = False
 paused = False
+slide_start_time = pygame.time.get_ticks()
 
 # set timestamp of file
-current_file_time = os.stat(file_name).st_mtime
+current_pic_file_time = os.stat(file_name).st_mtime
 
 # main program loop
 while not done:
@@ -162,36 +163,56 @@ while not done:
                 done = True
             elif event.key == K_p:
                 logging.debug('paused')
-                index -= 1
                 paused = True
             elif event.key == K_b:
                 logging.debug('back up')
                 index -= 2
+                # get next picture
+                logging.debug('getting picture number %d', index)
+                next_image = get_picture(id_array, index)
+                if next_image == False:
+                    id_array = load_array(file_name)
+                    index = 0
+                    next_image = get_picture(id_array, index)
+                slide_start_time = pygame.time.get_ticks()
+                # change image
+                crossfade(current_image, next_image)
+                current_image = next_image
+                if paused != True:
+                    index += 1
+                    # get next picture
+                    logging.debug('getting picture number %d', index)
+                    next_image = get_picture(id_array, index)
+                    if next_image == False:
+                        id_array = load_array(file_name)
+                        index = 0
+                        next_image = get_picture(id_array, index)
             elif event.key == K_s:
                 logging.debug('restarted')
                 paused = False
 
     # check for new piclist
-    if os.stat(file_name).st_mtime != current_file_time:
+    if os.stat(file_name).st_mtime != current_pic_file_time:
         id_array = load_array(file_name)
         index = 0
-        current_file_time = os.stat(file_name).st_mtime
+        current_pic_file_time = os.stat(file_name).st_mtime
 
     # check for new config file
 
-    # get next picture
-    next_image = get_picture(id_array, index)
+    # wait
+    clock.tick(4)
 
-    if next_image == False:
-        id_array = load_array(file_name)
-        index = 0
-    else:
-        # wait
-        clock.tick(1.0 / float(settings['slideshow']['delay']))
-
+    if pygame.time.get_ticks() > (slide_start_time + settings['slideshow']['delay'] * 1000):
+        slide_start_time = pygame.time.get_ticks()
         # change image
-        if paused == False:
-            crossfade(current_image, next_image)
-            current_image = next_image
+        crossfade(current_image, next_image)
+        current_image = next_image
+        if paused != True:
             index += 1
-            logging.debug('%d', index)
+            # get next picture
+            logging.debug('getting picture number %d', index)
+            next_image = get_picture(id_array, index)
+            if next_image == False:
+                id_array = load_array(file_name)
+                index = 0
+                next_image = get_picture(id_array, index)
