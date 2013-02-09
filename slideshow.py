@@ -28,7 +28,7 @@ def read_config():
         settings[section] = {}
         for option in config.options(section):
             settings[section][option] = config.get(section, option)
-            logger.debug('%s', settings[section][option])
+            logging.debug('%s', settings[section][option])
     return settings
 
 
@@ -46,7 +46,7 @@ def load_array(file_name):
         else:
             array.append(pic_id)
     file.close()
-    logger.debug('%d %s', len(array), 'pictures loaded')
+    logging.debug('%d %s', len(array), 'pictures loaded')
     return array
 
 
@@ -58,22 +58,22 @@ def get_picture(array, index):
         #split the line
         pic_id = re.split('\W+', pic_id)
         #get the URL
-        logger.debug('getting URL')
+        logging.debug('getting URL')
         image_url = smugmug.images_getURLs(ImageID=int(pic_id[0]),\
          ImageKey=pic_id[1],\
          CustomSize=settings['slideshow']['screensize'])
         image_url = image_url["Image"]["CustomURL"]
-        logger.debug('%s', image_url)
+        logging.debug('%s', image_url)
         #get the picture using the url and save locally
         urllib.urlretrieve(image_url, "/home/lwuser/slideshow/next_pic.jpg")
-        logger.debug('image retreived')
+        logging.debug('image retreived')
         #create an image using the picture and resize
         image = pygame.Surface((window.get_rect().width,\
          window.get_rect().height))
         image = pygame.image.load("/home/lwuser/slideshow/next_pic.jpg")
         image = image.convert()
         if image.get_rect() != window.get_rect():
-            logger.debug('resizing image')
+            logging.debug('resizing image')
             temp_image = pygame.Surface((window.get_rect().width,\
              window.get_rect().height))
             temp_image.fill((0, 0, 0))
@@ -179,4 +179,4 @@ while not done:
         crossfade(current_image, next_image)
         current_image = next_image
         index += 1
-        logger.debug('%d', index)
+        logging.debug('%d', index)
