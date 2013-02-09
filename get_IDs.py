@@ -21,7 +21,7 @@ def read_config():
 
 def get_albums():
 #    Create list of albums
-    file_name = "/home/parent/test/albums.txt"
+    file_name = "albums.txt"
     file = open(file_name, 'w')
     albums = smugmug.albums_get(NickName="ethanc")
     for album in albums["Albums"]:
@@ -32,6 +32,7 @@ def get_albums():
 def get_picIDs(file_name):
 #    Create list of pictures id, Key in all albums
     images_file = open(file_name, 'w')
+    albums = smugmug.albums_get(NickName="ethanc")
     for album in albums["Albums"]:
         images = smugmug.images_get(AlbumID=str(album["id"]),\
          AlbumKey=str(album["Key"]))
@@ -57,6 +58,6 @@ def smug_init():
 # ... Main program
 
 settings = read_config()
-file_name = "/home/parent/test/piclist_id.txt"
+file_name = "piclist_id.txt"
 smugmug = smug_init()
 get_picIDs(file_name)

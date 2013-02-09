@@ -204,10 +204,10 @@ while not done:
 
     if pygame.time.get_ticks() > (slide_start_time + int(settings['slideshow']['delay']) * 1000):
         slide_start_time = pygame.time.get_ticks()
-        # change image
-        crossfade(current_image, next_image)
-        current_image = next_image
         if paused != True:
+            # change image
+            crossfade(current_image, next_image)
+            current_image = next_image
             index += 1
             # get next picture
             logging.debug('getting picture number %d', index)
@@ -216,3 +216,7 @@ while not done:
                 id_array = load_array(file_name)
                 index = 0
                 next_image = get_picture(id_array, index)
+        else:
+            # redraw current image
+            crossfade(current_image, current_image)
+
