@@ -123,7 +123,7 @@ settings = read_config()
 file_name = get_playlist()
 
 print settings['slideshow']['log_file']
-logging.basicConfig(filename=settings['slideshow']['log_file'],\
+logging.basicConfig(\
  format='%(asctime)s %(levelname)s:%(message)s', level=logging.DEBUG)
 
 logging.debug('----Open Log File----')
@@ -146,6 +146,7 @@ pygame.mouse.set_visible(False)
 id_array = load_array(file_name)
 index = 0
 done = False
+paused = False
 
 # set timestamp of file
 current_file_time = os.stat(file_name).st_mtime
@@ -162,9 +163,13 @@ while not done:
             elif event.key == K_p:
                 logging.debug('paused')
                 index -= 1
-            elif event.hey == K_b:
+                paused = True
+            elif event.key == K_b:
                 logging.debug('back up')
                 index -= 2
+            elif event.key == K_s:
+                logging.debug('restarted')
+                paused = False
 
     # check for new piclist
     if os.stat(file_name).st_mtime != current_file_time:
@@ -185,7 +190,8 @@ while not done:
         clock.tick(1.0 / float(settings['slideshow']['delay']))
 
         # change image
-        crossfade(current_image, next_image)
-        current_image = next_image
-        index += 1
-        logging.debug('%d', index)
+        if paused == False:
+            crossfade(current_image, next_image)
+            current_image = next_image
+            index += 1
+            logging.debug('%d', index)
