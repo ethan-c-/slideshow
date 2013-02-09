@@ -123,7 +123,7 @@ settings = read_config()
 file_name = get_playlist()
 
 print settings['slideshow']['log_file']
-logging.basicConfig(\
+logging.basicConfig(filename='slideshow.log',\
  format='%(asctime)s %(levelname)s:%(message)s', level=logging.DEBUG)
 
 logging.debug('----Open Log File----')
