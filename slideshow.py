@@ -9,6 +9,7 @@ from smugpy import SmugMug
 import re
 import ConfigParser
 import os
+import logging
 
 #    Functions
 
@@ -27,6 +28,7 @@ def read_config():
         settings[section] = {}
         for option in config.options(section):
             settings[section][option] = config.get(section, option)
+	    print settings[section][option]
     return settings
 
 
@@ -44,6 +46,8 @@ def load_array(file_name):
         else:
             array.append(pic_id)
     file.close()
+    print len(array)
+    print "pictures loaded"
     return array
 
 
@@ -55,18 +59,22 @@ def get_picture(array, index):
         #split the line
         pic_id = re.split('\W+', pic_id)
         #get the URL
-        image_url = smugmug.images_getURLs(ImageID=int(pic_id[0]),\
+        print "getting URL"
+	image_url = smugmug.images_getURLs(ImageID=int(pic_id[0]),\
          ImageKey=pic_id[1],\
          CustomSize=settings['slideshow']['screensize'])
         image_url = image_url["Image"]["CustomURL"]
+        print image_url
         #get the picture using the url and save locally
         urllib.urlretrieve(image_url, "/home/lwuser/slideshow/next_pic.jpg")
-        #create an image using the picture and resize
+        print "image retreived"
+	#create an image using the picture and resize
         image = pygame.Surface((window.get_rect().width,\
          window.get_rect().height))
         image = pygame.image.load("/home/lwuser/slideshow/next_pic.jpg")
         image = image.convert()
         if image.get_rect() != window.get_rect():
+	    print "resizing image"
             temp_image = pygame.Surface((window.get_rect().width,\
              window.get_rect().height))
             temp_image.fill((0, 0, 0))
@@ -123,6 +131,8 @@ next_image = pygame.Surface((window.get_rect().width,\
 clock = pygame.time.Clock()
 pygame.mouse.set_visible(False)
 
+logging.basicConfig(filename='example.log', format='%(asctime)s %(levelname)s:%(message)s', level=logging.DEBUG)
+
 settings = read_config()
 file_name = get_playlist()
 smugmug = smug_init()
@@ -150,6 +160,8 @@ while not done:
         id_array = load_array(file_name)
         index = 0
         current_file_time = os.stat(file_name).st_mtime
+
+    # check for new config file
 
     # get next picture
     next_image = get_picture(id_array, index)
