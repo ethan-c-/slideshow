@@ -28,7 +28,7 @@ def read_config():
         settings[section] = {}
         for option in config.options(section):
             settings[section][option] = config.get(section, option)
-	    	logger.debug('%s', settings[section][option])
+            logger.debug('%s', settings[section][option])
     return settings
 
 
@@ -59,7 +59,7 @@ def get_picture(array, index):
         pic_id = re.split('\W+', pic_id)
         #get the URL
         logger.debug('getting URL')
-	image_url = smugmug.images_getURLs(ImageID=int(pic_id[0]),\
+        image_url = smugmug.images_getURLs(ImageID=int(pic_id[0]),\
          ImageKey=pic_id[1],\
          CustomSize=settings['slideshow']['screensize'])
         image_url = image_url["Image"]["CustomURL"]
@@ -67,13 +67,13 @@ def get_picture(array, index):
         #get the picture using the url and save locally
         urllib.urlretrieve(image_url, "/home/lwuser/slideshow/next_pic.jpg")
         logger.debug('image retreived')
-	#create an image using the picture and resize
+        #create an image using the picture and resize
         image = pygame.Surface((window.get_rect().width,\
          window.get_rect().height))
         image = pygame.image.load("/home/lwuser/slideshow/next_pic.jpg")
         image = image.convert()
         if image.get_rect() != window.get_rect():
-	    logger.debug('resizing image')
+            logger.debug('resizing image')
             temp_image = pygame.Surface((window.get_rect().width,\
              window.get_rect().height))
             temp_image.fill((0, 0, 0))
@@ -122,8 +122,8 @@ def smug_init():
 settings = read_config()
 file_name = get_playlist()
 
-logging.basicConfig(filename=settings['slideshow']['log_file'], \
-	format='%(asctime)s %(levelname)s:%(message)s', level=logging.DEBUG)
+logging.basicConfig(filename=settings['slideshow']['log_file'],\
+ format='%(asctime)s %(levelname)s:%(message)s', level=logging.DEBUG)
 
 smugmug = smug_init()
 
@@ -179,4 +179,4 @@ while not done:
         crossfade(current_image, next_image)
         current_image = next_image
         index += 1
-	logger.debug('%d', index)
+        logger.debug('%d', index)
