@@ -122,8 +122,11 @@ def smug_init():
 settings = read_config()
 file_name = get_playlist()
 
+print settings['slideshow']['log_file']
 logging.basicConfig(filename=settings['slideshow']['log_file'],\
  format='%(asctime)s %(levelname)s:%(message)s', level=logging.DEBUG)
+
+logging.debug('----Open Log File----')
 
 smugmug = smug_init()
 
@@ -156,6 +159,12 @@ while not done:
         if event.type == KEYDOWN:
             if event.key == K_ESCAPE:
                 done = True
+            else if event.key == K_p:
+                logging.debug('paused')
+                index -= 1
+            else if event.hey == K_b:
+                logging.debug('back up')
+                index -= 2
 
     # check for new piclist
     if os.stat(file_name).st_mtime != current_file_time:
