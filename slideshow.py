@@ -71,12 +71,12 @@ def get_picture(array, index):
          window.get_rect().height))
         image = pygame.image.load("next_pic.jpg")
         image = image.convert()
-        logging.debug(image height: '%d', image.get_rect().height)
-        logging.debug(image width: '%d', image.get_rect().width)
-        logging.debug(window height: '%d', window.get_rect().height)
-        logging.debug(window width: '%d', window.get_rect().width)
-        logging.debug(image bits: '%d', image.get_bitsize())
-        logging.debug(window bits: '%d', window.get_bitsize())
+        logging.debug('image height: %d', image.get_rect().height)
+        logging.debug('image width: %d', image.get_rect().width)
+        logging.debug('window height: %d', window.get_rect().height)
+        logging.debug('window width: %d', window.get_rect().width)
+        logging.debug('image bits: %d', image.get_bitsize())
+        logging.debug('window bits: %d', window.get_bitsize())
         if image.get_rect().height != window.get_rect().height  &&\
          image.get_rect().width !=window.get_rect().width:
             logging.debug('resizing image')
