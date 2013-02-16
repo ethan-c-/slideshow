@@ -78,27 +78,26 @@ def get_picture(array, index):
         logging.debug('image bits: %d', image.get_bitsize())
         logging.debug('window bits: %d', window.get_bitsize())
         if image.get_rect().height != window.get_rect().height  and\
-         image.get_rect().width !=window.get_rect().width:
+         image.get_rect().width != window.get_rect().width:
             logging.debug('resizing image')
-            temp_image = pygame.Surface((window.get_rect().width,\
-             window.get_rect().height))
-            temp_image.fill((0, 0, 0))
             ratio = min(float(window.get_rect().width) / \
              float(image.get_rect().width),\
              float(window.get_rect().height) / float(image.get_rect().height))
             width = int(ratio * image.get_rect().width)
             height = int(ratio * image.get_rect().height)
             image = pygame.transform.smoothscale(image, (width, height))
-            horiz_offset = (window.get_rect().width - width) / 2
-            vert_offset = (window.get_rect().height - height) / 2
-            temp_image.blit(image, (horiz_offset, vert_offset))
-            image = temp_image
-        return image
+        temp_image = pygame.Surface((window.get_rect().width,\
+         window.get_rect().height))
+        temp_image.fill((0, 0, 0))
+        horiz_offset = (window.get_rect().width - image.get_rect().width) / 2
+        vert_offset = (window.get_rect().height - image.get_rect().height) / 2
+        temp_image.blit(image, (horiz_offset, vert_offset))
+        return temp_image
 
 
 def crossfade(image1, image2):
     # fade out image1 and fade in image2
-    for alpha in [255]:
+    for alpha in range(0, 255, 2):
         image1.set_alpha(255 - alpha)
         image2.set_alpha(alpha)
         window.blit(image1, (0, 0))
@@ -144,7 +143,6 @@ next_image = pygame.Surface((window.get_rect().width,\
  window.get_rect().height))
 clock = pygame.time.Clock()
 pygame.mouse.set_visible(False)
-
 
 
 # initialize loop
@@ -207,7 +205,8 @@ while not done:
     # wait
     clock.tick(4)
 
-    if pygame.time.get_ticks() > (slide_start_time + int(settings['slideshow']['delay']) * 1000):
+    if pygame.time.get_ticks() > (slide_start_time +\
+     int(settings['slideshow']['delay']) * 1000):
         slide_start_time = pygame.time.get_ticks()
         if paused != True:
             # change image
@@ -224,4 +223,3 @@ while not done:
         else:
             # redraw current image
             crossfade(current_image, current_image)
-
