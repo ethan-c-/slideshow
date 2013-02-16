@@ -97,7 +97,8 @@ def get_picture(array, index):
 
 def crossfade(image1, image2):
     # fade out image1 and fade in image2
-    for alpha in range(0, 255, 2):
+    # for alpha in range(0, 255, 2):
+    for alpha in [255]:
         image1.set_alpha(255 - alpha)
         image2.set_alpha(alpha)
         window.blit(image1, (0, 0))
