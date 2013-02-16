@@ -77,7 +77,7 @@ def get_picture(array, index):
         logging.debug('window width: %d', window.get_rect().width)
         logging.debug('image bits: %d', image.get_bitsize())
         logging.debug('window bits: %d', window.get_bitsize())
-        if image.get_rect().height != window.get_rect().height  &&\
+        if image.get_rect().height != window.get_rect().height  and\
          image.get_rect().width !=window.get_rect().width:
             logging.debug('resizing image')
             temp_image = pygame.Surface((window.get_rect().width,\
