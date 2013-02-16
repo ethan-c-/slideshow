@@ -28,7 +28,6 @@ def read_config():
         settings[section] = {}
         for option in config.options(section):
             settings[section][option] = config.get(section, option)
-            logging.debug('%s', settings[section][option])
     return settings
 
 
@@ -72,7 +71,14 @@ def get_picture(array, index):
          window.get_rect().height))
         image = pygame.image.load("next_pic.jpg")
         image = image.convert()
-        if image.get_rect() != window.get_rect():
+        logging.debug(image height: '%d', image.get_rect().height)
+        logging.debug(image width: '%d', image.get_rect().width)
+        logging.debug(window height: '%d', window.get_rect().height)
+        logging.debug(window width: '%d', window.get_rect().width)
+        logging.debug(image bits: '%d', image.get_bitsize())
+        logging.debug(window bits: '%d', window.get_bitsize())
+        if image.get_rect().height != window.get_rect().height  &&\
+         image.get_rect().width !=window.get_rect().width:
             logging.debug('resizing image')
             temp_image = pygame.Surface((window.get_rect().width,\
              window.get_rect().height))
@@ -122,7 +128,6 @@ def smug_init():
 settings = read_config()
 file_name = get_playlist()
 
-print settings['slideshow']['log_file']
 logging.basicConfig(filename='slideshow.log',\
  format='%(asctime)s %(levelname)s:%(message)s', level=logging.DEBUG)
 
